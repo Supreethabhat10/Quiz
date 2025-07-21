@@ -43,6 +43,15 @@ function submitQuiz() {
     userAnswers.push({ Question: q.question, Selected: answer, Correct: q.answer });
   });
 
+  // Fill certificate content
+  document.getElementById("certName").textContent = name;
+  document.getElementById("certScore").textContent = `Scored ${score}/${questions.length}`;
+  document.getElementById("certQuizTitle").textContent = `in "${document.getElementById("quizTitle").textContent}"`;
+
+  document.getElementById("certificate").classList.remove("hidden");
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
   document.getElementById("certContent").innerHTML =
     `<b>${name}</b> scored <b>${score}/${questions.length}</b> in "<b>${document.getElementById("quizTitle").textContent}</b>"`;
 
