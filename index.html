@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <title>Quiz App</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="libs/html2pdf.bundle.min.js"></script>
-  <script src="libs/xlsx.full.min.js"></script>
+<script src="libs/html2pdf.bundle.min.js"></script>
+<script src="libs/xlsx.full.min.js"></script>
 </head>
 <body class="p-6 font-sans bg-gray-100">
   <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
@@ -14,17 +14,19 @@
     <label class="block mb-2">Enter Your Name:</label>
     <input type="text" id="username" class="border p-2 w-full mb-4"/>
 
-    <div id="quizContainer" class="space-y-4"></div>
+  <div id="quiz-container"></div>
+<button onclick="submitQuiz()">Submit Quiz</button>
+<div id="score-display" style="margin-top: 20px;"></div>
+
 
     <button onclick="submitQuiz()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded">Submit Quiz</button>
 
-    <div id="certificate" class="hidden mt-6 relative w-[1200px] h-[850px] mx-auto">
-      <img src="background.png" class="absolute w-full h-full object-cover z-0 rounded-lg" alt="Certificate Background" />
-      <div class="absolute top-[35%] w-full text-center z-10">
-        <p class="text-4xl font-bold text-gray-800" id="certName">Name</p>
-        <p class="text-2xl mt-4 text-gray-700" id="certScore">Scored 0/0</p>
-        <p class="text-xl mt-2 text-gray-600" id="certQuizTitle">in Quiz</p>
-      </div>
+   <div id="certificate" style="display:none; position:relative; width:1100px; height:770px;">
+  <img src="background.png" style="position:absolute; width:100%; height:100%;"/>
+  <div style="position:absolute; top:270px; width:100%; text-align:center; font-size:28px;" id="cert-name"></div>
+  <div style="position:absolute; top:350px; width:100%; text-align:center; font-size:22px;" id="cert-score"></div>
+  <div style="position:absolute; top:390px; width:100%; text-align:center; font-size:20px;" id="cert-quiz-title"></div>
+</div>
       <div class="absolute bottom-10 right-10 z-10">
         <button onclick="downloadCertificate()" class="bg-green-600 text-white px-4 py-2 rounded">Download Certificate</button>
         <button onclick="exportToExcel()" class="bg-yellow-500 text-white px-4 py-2 rounded ml-2">Export Answers</button>
