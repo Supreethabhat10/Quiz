@@ -1,27 +1,26 @@
-
-function submitQuiz() {
+function generateCertificate() {
   const name = document.getElementById("participantName").value.trim();
-  if (!name) {
+  if (name === "") {
     alert("Please enter your name.");
     return;
   }
 
-  let score = 0;
-  if (document.querySelector('input[name="q1"]:checked')?.value === "correct") score += 1;
-  if (document.querySelector('input[name="q2"]:checked')?.value === "correct") score += 1;
+  fetch("certificate-template.html")
+    .then(response => response.text())
+    .then(template => {
+      const filledTemplate = template.replace("{{name}}", name);
+      const container = document.getElementById("certificateArea");
+      container.innerHTML = filledTemplate;
+      container.style.display = "block";
 
-  document.getElementById("quiz").style.display = "none";
-  document.getElementById("certificate").style.display = "block";
+      const opt = {
+        margin: 0,
+        filename: `Certificate_${name.replace(/\s+/g, '_')}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+      };
 
-  document.getElementById("certName").textContent = name;
-  document.getElementById("certScore").textContent = "Score: " + score + "/2";
-
-  // Create a PDF using html2canvas + jsPDF
-  html2canvas(document.getElementById("certificate")).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF();
-    pdf.addImage(imgData, 'PNG', 10, 10, 190, 0);
-    const link = document.getElementById("downloadBtn");
-    link.href = pdf.output('bloburl');
-  });
+      html2pdf().set(opt).from(container).save();
+    });
 }
