@@ -43,7 +43,6 @@ function submitQuiz() {
     userAnswers.push({ Question: q.question, Selected: answer, Correct: q.answer });
   });
 
-  // Fill certificate content
   document.getElementById("certName").textContent = name;
   document.getElementById("certScore").textContent = `Scored ${score}/${questions.length}`;
   document.getElementById("certQuizTitle").textContent = `in "${document.getElementById("quizTitle").textContent}"`;
@@ -52,14 +51,17 @@ function submitQuiz() {
   window.scrollTo(0, document.body.scrollHeight);
 }
 
-  document.getElementById("certContent").innerHTML =
-    `<b>${name}</b> scored <b>${score}/${questions.length}</b> in "<b>${document.getElementById("quizTitle").textContent}</b>"`;
-
-  document.getElementById("certificate").classList.remove("hidden");
-}
-
 function downloadCertificate() {
-  html2pdf().from(document.getElementById("certificate")).save("certificate.pdf");
+  const cert = document.getElementById("certificate");
+  html2pdf()
+    .set({
+      filename: 'certificate.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'px', format: [1200, 850], orientation: 'landscape' }
+    })
+    .from(cert)
+    .save();
 }
 
 function exportToExcel() {
@@ -72,7 +74,7 @@ function exportToExcel() {
 function saveQuestions() {
   try {
     const json = JSON.parse(document.getElementById("questionEditor").value);
-    localStorage.setItem("questionsBackup", JSON.stringify(json)); // Optional local backup
+    localStorage.setItem("questionsBackup", JSON.stringify(json));
     questions = json.questions;
     document.getElementById("quizTitle").textContent = json.quizTitle;
     renderQuiz();
