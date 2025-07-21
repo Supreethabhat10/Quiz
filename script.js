@@ -1,85 +1,74 @@
-let questions = [];
+let quizData = {};
 let userAnswers = [];
 
-window.onload = async function () {
-  const response = await fetch('questions.json');
-  const data = await response.json();
-  questions = data.questions;
-  document.getElementById("quizTitle").textContent = data.quizTitle;
-  document.getElementById("questionEditor").value = JSON.stringify(data, null, 2);
-  renderQuiz();
-};
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("questions.json")
+    .then(res => res.json())
+    .then(data => {
+      quizData = data;
+      renderQuiz(data);
+    });
+});
 
-function renderQuiz() {
-  const container = document.getElementById("quizContainer");
-  container.innerHTML = "";
-
-  questions.forEach((q, index) => {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <p class="font-semibold">${index + 1}. ${q.question}</p>
-      ${q.options.map(opt => `
-        <label class="block">
-          <input type="radio" name="q${index}" value="${opt}" class="mr-2">
-          ${opt}
-        </label>
-      `).join("")}
-    `;
-    container.appendChild(div);
+function renderQuiz(data) {
+  const quizContainer = document.getElementById("quiz-container");
+  quizContainer.innerHTML = `<h2>${data.quizTitle}</h2>`;
+  data.questions.forEach((q, index) => {
+    const optionsHTML = q.options.map(opt =>
+      `<label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label><br>`
+    ).join('');
+    quizContainer.innerHTML += `
+      <div style="margin-bottom:20px;">
+        <p><b>Q${index + 1}: ${q.question}</b></p>
+        ${optionsHTML}
+      </div>`;
   });
 }
 
 function submitQuiz() {
-  const name = document.getElementById("username").value.trim();
-  if (!name) return alert("Please enter your name");
-
-  let score = 0;
   userAnswers = [];
+  let score = 0;
 
-  questions.forEach((q, i) => {
-    const selected = document.querySelector(`input[name="q${i}"]:checked`);
-    const answer = selected ? selected.value : "Not Answered";
-    if (answer === q.answer) score++;
-    userAnswers.push({ Question: q.question, Selected: answer, Correct: q.answer });
+  quizData.questions.forEach((q, index) => {
+    const selected = document.querySelector(`input[name=q${index}]:checked`);
+    const ans = selected ? selected.value : "";
+    userAnswers.push({ question: q.question, selected: ans, correct: q.answer });
+
+    if (ans === q.answer) score++;
   });
 
-  document.getElementById("certName").textContent = name;
-  document.getElementById("certScore").textContent = `Scored ${score}/${questions.length}`;
-  document.getElementById("certQuizTitle").textContent = `in "${document.getElementById("quizTitle").textContent}"`;
+  const name = prompt("Enter your name:");
+  document.getElementById("score-display").innerHTML = `<h3>${name}, your score: ${score}/${quizData.questions.length}</h3>`;
+  
+  // Store for certificate
+  document.getElementById("cert-name").textContent = name;
+  document.getElementById("cert-score").textContent = `Score: ${score}/${quizData.questions.length}`;
+  document.getElementById("cert-quiz-title").textContent = quizData.quizTitle;
 
-  document.getElementById("certificate").classList.remove("hidden");
-  window.scrollTo(0, document.body.scrollHeight);
+  document.getElementById("download-btn").style.display = "inline-block";
+
+  // Optionally show export
+  exportToExcel();
 }
 
 function downloadCertificate() {
-  const cert = document.getElementById("certificate");
-  html2pdf()
-    .set({
-      filename: 'certificate.pdf',
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'px', format: [1200, 850], orientation: 'landscape' }
-    })
-    .from(cert)
-    .save();
+  document.getElementById("certificate").style.display = "block";
+  html2pdf().from(document.getElementById("certificate")).save("certificate.pdf");
+  document.getElementById("certificate").style.display = "none";
 }
 
 function exportToExcel() {
   const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(userAnswers);
-  XLSX.utils.book_append_sheet(wb, ws, "Answers");
-  XLSX.writeFile(wb, "quiz_answers.xlsx");
-}
+  const ws_data = [
+    ["Question", "Your Answer", "Correct Answer"]
+  ];
 
-function saveQuestions() {
-  try {
-    const json = JSON.parse(document.getElementById("questionEditor").value);
-    localStorage.setItem("questionsBackup", JSON.stringify(json));
-    questions = json.questions;
-    document.getElementById("quizTitle").textContent = json.quizTitle;
-    renderQuiz();
-    alert("Questions updated successfully!");
-  } catch (e) {
-    alert("Invalid JSON: " + e.message);
-  }
+  userAnswers.forEach(ans => {
+    ws_data.push([ans.question, ans.selected, ans.correct]);
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(ws_data);
+  XLSX.utils.book_append_sheet(wb, ws, "Quiz Answers");
+
+  XLSX.writeFile(wb, "quiz_answers.xlsx");
 }
