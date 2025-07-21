@@ -3,16 +3,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quiz</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate of Participation</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Confidentiality Quiz</h1>
-    <form id="quizForm"></form>
-    <button onclick="submitQuiz()">Submit</button>
+  <div class="certificate-container">
+    <img src="background.png" alt="Certificate Background" class="background" />
+    <div class="certificate-content">
+      <h1>CERTIFICATE OF PARTICIPATION</h1>
+      <p class="subtitle">This certificate is proudly presented to</p>
+      <h2 id="participantName">[Participant Name]</h2>
+      <p class="description">
+        For participating in the Quiz held by <strong>KMCHAT</strong> on 6 June 2025.
+      </p>
+      <div class="footer">
+        <p><strong>Dr. Smith</strong><br />Coordinator</p>
+      </div>
+    </div>
   </div>
-  <script src="quiz.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name") || "Participant";
+    document.getElementById("participantName").textContent = name;
+  </script>
 </body>
 </html>
