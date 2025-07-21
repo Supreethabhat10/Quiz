@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="certificate" id="cert">
+    <h1>Certificate of Completion</h1>
+    <p>This is to certify that</p>
+    <h2 id="studentName"></h2>
+    <p>has successfully completed the quiz</p>
+    <h3>Score: <span id="score"></span></h3>
+    <p>Date: <span id="date"></span></p>
+  </div>
+  <button onclick="downloadPDF()">Download PDF</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("studentName").innerText = params.get("name") || "Anonymous";
+    document.getElementById("score").innerText = params.get("score") || "0";
+    document.getElementById("date").innerText = new Date().toLocaleDateString();
+
+    function downloadPDF() {
+      const cert = document.getElementById("cert");
+      html2pdf().from(cert).save("certificate.pdf");
+    }
+  </script>
+</body>
+</html>
