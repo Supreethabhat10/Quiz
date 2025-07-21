@@ -1,115 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Confidentiality Quiz</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      background: #f0f0f0;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    .question {
-      margin-bottom: 20px;
-    }
-    #certificate-container {
-      display: none;
-      text-align: center;
-      padding: 30px;
-      background: #fff;
-      border: 2px solid #3498db;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
-    #downloadBtn {
-      margin-top: 20px;
-      display: inline-block;
-      padding: 10px 20px;
-      background: #3498db;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Certificate Generator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <div id="quiz-container">
-      <h2>Confidentiality Quiz</h2>
-      <label for="nameInput">Your Name:</label>
-      <input type="text" id="nameInput" required style="width: 100%; padding: 8px; margin-bottom: 20px;" />
-
-      <div class="question">
-        <strong>1. Which of the following actions helps maintain the confidentiality of EHRs?</strong><br>
-        <label><input type="radio" name="q1" value="correct"> Keeping passwords confidential and logging out of the system when not in use</label><br>
-        <label><input type="radio" name="q1" value="wrong"> Sharing patient information on social media</label><br>
-        <label><input type="radio" name="q1" value="wrong"> Printing patient records for personal use</label><br>
-        <label><input type="radio" name="q1" value="wrong"> Sharing patient data with anyone</label><br>
-      </div>
-
-      <div class="question">
-        <strong>2. Why is it essential to always log out of the EHR system when you're finished with your work?</strong><br>
-        <label><input type="radio" name="q2" value="correct"> To prevent unauthorized access to patient information</label><br>
-        <label><input type="radio" name="q2" value="wrong"> To allow the system to auto-update records</label><br>
-        <label><input type="radio" name="q2" value="wrong"> To speed up the system</label><br>
-        <label><input type="radio" name="q2" value="wrong"> To keep your password valid</label><br>
-      </div>
-
-      <button onclick="submitQuiz()">Submit Quiz</button>
-    </div>
-
-    <div id="certificate-container">
-      <h2>Certificate of Completion</h2>
-      <p>This certifies that</p>
-      <h3 id="certName"></h3>
-      <p>has successfully completed the Confidentiality Awareness Quiz.</p>
-      <p id="certScore"></p>
-      <button onclick="downloadPDF()">Download Certificate as PDF</button>
-    </div>
+    <h1>Quiz Certificate Generator</h1>
+    <input type="text" id="participantName" placeholder="Enter your name" />
+    <button onclick="generateCertificate()">Download Certificate</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Hidden certificate area -->
+  <div id="certificateArea" style="display:none;"></div>
 
-  <script>
-    function submitQuiz() {
-      const name = document.getElementById("nameInput").value.trim();
-      if (!name) {
-        alert("Please enter your name");
-        return;
-      }
-      let score = 0;
-      if (document.querySelector('input[name="q1"]:checked')?.value === "correct") score++;
-      if (document.querySelector('input[name="q2"]:checked')?.value === "correct") score++;
-
-      // Hide quiz and show certificate
-      document.getElementById("quiz-container").style.display = "none";
-      document.getElementById("certificate-container").style.display = "block";
-
-      // Fill certificate details
-      document.getElementById("certName").textContent = name;
-      document.getElementById("certScore").textContent = "Score: " + score + "/2";
-    }
-
-    function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      html2canvas(document.getElementById("certificate-container")).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("certificate.pdf");
-      });
-    }
-  </script>
+  <script src="libs/html2pdf.bundle.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
