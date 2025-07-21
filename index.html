@@ -1,32 +1,57 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Certificate of Participation</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Confidentiality Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #f0f0f0; }
+    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+    .question { margin-bottom: 20px; }
+    .certificate { display: none; text-align: center; padding: 30px; background: #fff; border: 2px solid #3498db; border-radius: 12px; margin-top: 20px; }
+    h2 { color: #2c3e50; }
+    #downloadBtn { margin-top: 20px; display: inline-block; padding: 10px 20px; background: #3498db; color: white; text-decoration: none; border-radius: 6px; }
+  </style>
 </head>
 <body>
-  <div class="certificate-container">
-    <img src="background.png" alt="Certificate Background" class="background" />
-    <div class="certificate-content">
-      <h1>CERTIFICATE OF PARTICIPATION</h1>
-      <p class="subtitle">This certificate is proudly presented to</p>
-      <h2 id="participantName">[Participant Name]</h2>
-      <p class="description">
-        For participating in the Quiz held by <strong>KMCHAT</strong> on 6 June 2025.
-      </p>
-      <div class="footer">
-        <p><strong>Dr. Smith</strong><br />Coordinator</p>
+  <div class="container">
+    <div id="quiz">
+      <h2>Confidentiality Quiz</h2>
+      <label for="participantName">Your Name:</label><br>
+      <input type="text" id="participantName" required style="width: 100%; padding: 8px;"><br><br>
+
+      <div class="question">
+        <strong>1. Which of the following actions helps maintain the confidentiality of EHRs?</strong><br>
+        <input type="radio" name="q1" value="wrong1"> Sharing patient information on social media to increase awareness<br>
+        <input type="radio" name="q1" value="correct"> Keeping passwords confidential and logging out of the system when not in use<br>
+        <input type="radio" name="q1" value="wrong2"> Sharing patient data with anyone who asks<br>
+        <input type="radio" name="q1" value="wrong3"> Printing patient records for personal use<br>
       </div>
+
+      <div class="question">
+        <strong>2. Why is it essential to always log out of the EHR system when you're finished with your work?</strong><br>
+        <input type="radio" name="q2" value="correct"> To prevent unauthorized access to patient information if someone else uses the computer<br>
+        <input type="radio" name="q2" value="wrong1"> To allow the system to automatically update patient records<br>
+        <input type="radio" name="q2" value="wrong2"> To speed up the system for other users<br>
+        <input type="radio" name="q2" value="wrong3"> To ensure your password remains valid for the next session<br>
+      </div>
+
+      <button onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+
+    <div id="certificate" class="certificate">
+      <h2>Certificate of Completion</h2>
+      <p>This certifies that</p>
+      <h3 id="certName"></h3>
+      <p>has successfully completed the Confidentiality Awareness Quiz.</p>
+      <p id="certScore"></p>
+      <a id="downloadBtn" href="#" download="certificate.pdf">Download Certificate</a>
     </div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get("name") || "Participant";
-    document.getElementById("participantName").textContent = name;
-  </script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    
 </body>
 </html>
