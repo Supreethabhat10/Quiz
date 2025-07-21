@@ -18,12 +18,21 @@
 
     <button onclick="submitQuiz()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded">Submit Quiz</button>
 
-    <div id="certificate" class="hidden mt-6 p-6 border border-blue-500 bg-blue-50 text-center rounded">
-      <h2 class="text-xl font-bold mb-2">Certificate of Completion</h2>
-      <p id="certContent"></p>
-      <button onclick="downloadCertificate()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Download Certificate</button>
-      <button onclick="exportToExcel()" class="mt-2 bg-yellow-500 text-white px-4 py-2 rounded">Export Answers to Excel</button>
-    </div>
+  <div id="certificate" class="hidden mt-6 relative w-[1200px] h-[850px] mx-auto">
+  <img src="background.png" class="absolute w-full h-full object-cover z-0 rounded-lg" alt="Certificate Background" />
+  
+  <div class="absolute top-[35%] w-full text-center z-10">
+    <p class="text-4xl font-bold text-gray-800" id="certName">Name</p>
+    <p class="text-2xl mt-4 text-gray-700" id="certScore">Scored 0/0</p>
+    <p class="text-xl mt-2 text-gray-600" id="certQuizTitle">in Quiz</p>
+  </div>
+
+  <div class="absolute bottom-10 right-10 z-10">
+    <button onclick="downloadCertificate()" class="bg-green-600 text-white px-4 py-2 rounded">Download Certificate</button>
+    <button onclick="exportToExcel()" class="bg-yellow-500 text-white px-4 py-2 rounded ml-2">Export Answers</button>
+  </div>
+</div>
+
 
     <hr class="my-8"/>
 
