@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="libs/html2pdf.bundle.min.js"></script>
+  <script src="libs/xlsx.full.min.js"></script>
+</head>
+<body class="p-6 font-sans bg-gray-100">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold mb-4" id="quizTitle"></h1>
+
+    <label class="block mb-2">Enter Your Name:</label>
+    <input type="text" id="username" class="border p-2 w-full mb-4"/>
+
+    <div id="quizContainer" class="space-y-4"></div>
+
+    <button onclick="submitQuiz()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded">Submit Quiz</button>
+
+    <div id="certificate" class="hidden mt-6 p-6 border border-blue-500 bg-blue-50 text-center rounded">
+      <h2 class="text-xl font-bold mb-2">Certificate of Completion</h2>
+      <p id="certContent"></p>
+      <button onclick="downloadCertificate()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Download Certificate</button>
+      <button onclick="exportToExcel()" class="mt-2 bg-yellow-500 text-white px-4 py-2 rounded">Export Answers to Excel</button>
+    </div>
+
+    <hr class="my-8"/>
+
+    <h2 class="text-xl font-semibold mb-2">Manage Questions (JSON)</h2>
+    <textarea id="questionEditor" class="w-full h-64 border p-2 font-mono"></textarea>
+    <button onclick="saveQuestions()" class="mt-2 bg-gray-800 text-white px-4 py-2 rounded">Save JSON & Reload</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
